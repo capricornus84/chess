@@ -23,12 +23,6 @@ public class ChessBoard {
                 }
 
                 board[endLine][endColumn] = board[startLine][startColumn]; // if piece can move, we moved a piece
-
-                if ((board[endLine][endColumn].getSymbol().equals("R") && !board[endLine][endColumn].check) ||
-                        (board[endLine][endColumn].getSymbol().equals("K") && !board[endLine][endColumn].check)){
-                    board[endLine][endColumn].check = true;
-                }
-
                 board[startLine][startColumn] = null; // set null to previous cell
                 this.nowPlayer = this.nowPlayerColor().equals("White") ? "Black" : "White";
 
@@ -71,11 +65,11 @@ public class ChessBoard {
                         board[0][0].check && board[0][4].check &&
                         !new King("White").isUnderAttack(this, 0, 2)) { // check that position not in under attack
                     board[0][4] = null;
-                    board[0][2] = new King("White");   // move King
-                    board[0][2].check = false;
+                    board[0][1] = new King("White");   // move King
+                    board[0][1].check = false;
                     board[0][0] = null;
-                    board[0][3] = new Rook("White");   // move Rook
-                    board[0][3].check = false;
+                    board[0][2] = new Rook("White");   // move Rook
+                    board[0][2].check = false;
                     nowPlayer = "Black";  // next turn
                     return true;
                 } else return false;
@@ -88,17 +82,18 @@ public class ChessBoard {
                         board[7][0].check && board[7][4].check &&
                         !new King("Black").isUnderAttack(this, 7, 2)) { // check that position not in under attack
                     board[7][4] = null;
-                    board[7][2] = new King("Black");   // move King
-                    board[7][2].check = false;
+                    board[7][1] = new King("Black");   // move King
+                    board[7][1].check = false;
                     board[7][0] = null;
-                    board[7][3] = new Rook("Black");   // move Rook
-                    board[7][3].check = false;
+                    board[7][2] = new Rook("Black");   // move Rook
+                    board[7][2].check = false;
                     nowPlayer = "White";  // next turn
                     return true;
                 } else return false;
             } else return false;
         }
     }
+
     public boolean castling7() {
         if (nowPlayer.equals("White")) {
             if (board[0][7] == null || board[0][4] == null) return false;

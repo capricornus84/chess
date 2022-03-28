@@ -1,49 +1,34 @@
-public class King extends ChessPiece{
+public class King extends ChessPiece {
 
     public King(String color) {
         super(color);
     }
-    public boolean checkPos(int pos) {
-        return pos >= 0 && pos <= 7;
-    }
+
     @Override
-    boolean canMoveToPosition(ChessBoard chessBoard, int line, int column, int toLine, int toColumn) {
-        if (line==toLine && column==toColumn){
-            return false;
-        }
-        if (checkPos(line) && checkPos(column) && checkPos(toLine) && checkPos(toColumn) && (chessBoard.board[toLine][toColumn] ==null ||
-                !chessBoard.board[toLine][toColumn].getColor().equals(this.color) && chessBoard.board[toLine][toColumn]!=null)) {
-            if ((line+1) == toLine){
-                return true;
-            } else if ((line-1) == toLine){
-                return true;
-            } else if ((column+1) == toColumn){
-                return true;
-            } else if ((column-1) == toColumn){
-                return true;
-            } else if ( (line-1) == toLine && (column+1) == toColumn ) {
-                return true;
-            } else if ( (line-1) == toLine && (column-1) == toColumn ) {
-                return true;
-            } else if ( (line+1) == toLine && (column+1) == toColumn ) {
-                return true;
-            } else if ( (line+1) == toLine && (column-1) == toColumn ) {
-                return true;
-            } else {
-                return false;
+    public String getColor() {
+        return color;
+    }
+
+    @Override
+    public boolean canMoveToPosition(ChessBoard chessBoard, int line, int column, int toLine, int toColumn) {
+        if (checkPos(line) && checkPos(column) && checkPos(toLine) && checkPos(toColumn)) {
+            if (Math.abs(line - toLine) > 1 || Math.abs(column - toColumn) > 1) return false;
+
+            if (isUnderAttack(chessBoard, toLine, toColumn)) return false;
+
+            if (chessBoard.board[toLine][toColumn] != null) {
+                return !chessBoard.board[toLine][toColumn].getColor().equals(color);
             }
-        } else {
-            return false;
-        }
+
+            return true;
+        } else return false;
     }
 
-    public String getColor(){
-        return super.color;
-    }
-
-    public String getSymbol(){
+    @Override
+    public String getSymbol() {
         return "K";
     }
+
     public boolean isUnderAttack(ChessBoard chessBoard, int line, int column) {
         if (checkPos(line) && checkPos(column)) {
             for (int i = 0; i < 7; i++) {
@@ -57,5 +42,9 @@ public class King extends ChessPiece{
             }
             return false;
         } else return false;
+    }
+
+    public boolean checkPos(int pos) {
+        return pos >= 0 && pos <= 7;
     }
 }

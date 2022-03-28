@@ -1,48 +1,46 @@
-public class Horse extends ChessPiece{
-
+public class Horse extends ChessPiece {
     public Horse(String color) {
         super(color);
     }
-    public boolean checkPos(int pos) {
-        return pos >= 0 && pos <= 7;
-    }
+
     @Override
-    boolean canMoveToPosition(ChessBoard chessBoard, int line, int column, int toLine, int toColumn) {
-        if (line==toLine && column==toColumn){
-            return false;
-        }
-        if (checkPos(line) && checkPos(column) && checkPos(toLine) && checkPos(toColumn) && (chessBoard.board[toLine][toColumn] ==null ||
-                !chessBoard.board[toLine][toColumn].getColor().equals(this.color) && chessBoard.board[toLine][toColumn]!=null)) {
-            if ((line+2)==toLine && (column+1)==toColumn){
-                return true;
-            } else if ((line+2)==toLine && (column-1)==toColumn){
-                return true;
-            } else if ((line-2)==toLine && (column+1)==toColumn){
-                return true;
-            } else if ((line-2)==toLine && (column-1)==toColumn){
-                return true;
-            } else if ((line+1)==toLine && (column+2)==toColumn){
-                return true;
-            } if ((line-1)==toLine && (column+2)==toColumn){
-                return true;
-            } if ((line+1)==toLine && (column-2)==toColumn){
-                return true;
-            } if ((line-1)==toLine && (column-2)==toColumn){
-                return true;
-            } else {
-                return false;
+    public String getColor() {
+        return this.color;
+    }
+
+    @Override
+    public boolean canMoveToPosition(ChessBoard chessBoard, int line, int column, int toLine, int toColumn) {
+        if (checkPos(line) && checkPos(column) && checkPos(toLine) && checkPos(toColumn)) {
+            if (line != toLine && column != toColumn && (chessBoard.board[toLine][toColumn] == null || // check that horse
+                    !chessBoard.board[toLine][toColumn].color.equals(this.color)) &&                   // can't move out
+                    chessBoard.board[line][column] != null) {                                          // position is empty
+                if (!chessBoard.board[line][column].equals(this)) {
+                    return false;
+                }
+
+                // all positions for horse
+                int[][] positions = new int[][]{
+                        {line - 2, column - 1}, {line - 2, column + 1},
+                        {line + 2, column - 1}, {line + 2, column + 1},
+                        {line - 1, column - 2}, {line - 1, column + 2},
+                        {line + 1, column - 2}, {line + 1, column + 2}};
+
+                for (int i = 0; i < positions.length; i++) {
+                    if (positions[i][0] == toLine && positions[i][1] == toColumn)
+                        return true;  // check that toLine and toColumn
+                }                                                                               // in positions
             }
-        } else {
-            return false;
-        }
+        } else return false;
+        return false;
     }
 
-    public String getColor(){
-        return super.color;
-    }
-
-    public String getSymbol(){
+    @Override
+    public String getSymbol() {
         return "H";
     }
 
+    public boolean checkPos(int pos) {   // check that our position is correct
+        if (pos >= 0 && pos <= 7) return true;
+        else return false;
+    }
 }
